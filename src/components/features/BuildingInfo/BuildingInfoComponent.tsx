@@ -98,7 +98,7 @@ export const BuildingInfoComponent: React.FC<BuildingInfoComponentProps> = ({
   const building = buildingInfo.building;
 
   return (
-    <div className={`bg-white rounded-lg border p-4 ${className}`}>
+    <div className={`bg-white rounded-lg border p-4 border-red-500 ${className}`} style={{backgroundColor: '#fff2f2'}}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2">
