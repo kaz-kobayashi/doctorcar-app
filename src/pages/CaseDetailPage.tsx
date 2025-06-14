@@ -3,7 +3,7 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import { useCaseStore, useAuthStore } from '@/stores';
 import { LoadingSpinner, Button } from '@/components/common';
 import { CASE_STATUS } from '@/constants';
-import { MapComponent, VitalSignsComponent, ChatComponent, TreatmentComponent, LocationTracker } from '@/components/features';
+import { MapComponent, VitalSignsComponent, ChatComponent, TreatmentComponent, LocationTracker, BuildingInfoComponent } from '@/components/features';
 
 export const CaseDetailPage: React.FC = () => {
   const { caseId } = useParams<{ caseId: string }>();
@@ -260,6 +260,11 @@ export const CaseDetailPage: React.FC = () => {
               {/* 位置追跡 */}
               <div className="mt-4">
                 <LocationTracker onLocationUpdate={handleLocationUpdate} />
+              </div>
+              
+              {/* 建物情報 */}
+              <div className="mt-4">
+                <BuildingInfoComponent location={currentCase.sceneLocation} />
               </div>
             </div>
             

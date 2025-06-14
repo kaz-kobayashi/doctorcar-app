@@ -88,3 +88,6 @@ export class AppError extends Error {
     this.name = 'AppError';
   }
 }
+
+// 建物情報関連
+export * from './buildingInfo';
