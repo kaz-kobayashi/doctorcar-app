@@ -79,6 +79,21 @@ export const DEMO_CASES: Case[] = [
     hospitalLocation: createMockGeoPoint(35.665498, 139.686567),
     createdAt: createMockTimestamp(new Date('2024-12-14T11:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T11:00:00Z')) as any
+  },
+  {
+    id: 'case-004',
+    caseName: '2024-12-14 東京駅 転落事故',
+    status: 'on_scene',
+    teamId: 'doctor-001',
+    patientInfo: {
+      age: 52,
+      gender: 'female',
+      name: '高橋 美奈子'
+    },
+    sceneLocation: createMockGeoPoint(35.6812, 139.7671), // 東京駅
+    hospitalLocation: createMockGeoPoint(35.665498, 139.686567),
+    createdAt: createMockTimestamp(new Date('2024-12-14T12:00:00Z')) as any,
+    updatedAt: createMockTimestamp(new Date('2024-12-14T12:15:00Z')) as any
   }
 ];
 
