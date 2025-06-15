@@ -42,10 +42,13 @@ function App() {
       throw error;
     }
   }, []); // 依存配列を空にして一度だけ実行
+
+  // GitHub Pages用のbasename設定
+  const basename = process.env.NODE_ENV === 'production' ? '/doctorcar-app' : '';
   
   return (
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
