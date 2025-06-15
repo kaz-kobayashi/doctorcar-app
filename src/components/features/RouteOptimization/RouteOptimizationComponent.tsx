@@ -221,14 +221,15 @@ export const RouteOptimizationComponent: React.FC<RouteOptimizationComponentProp
       )}
 
       {/* Route Request Form */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            出発地
+      <div className="space-y-6 mb-6">
+        {/* 出発地セクション */}
+        <div className="bg-gray-50 rounded-lg p-4">
+          <label className="block text-lg font-semibold text-gray-900 mb-3">
+            📍 出発地
           </label>
           
           {/* Origin Type Selection */}
-          <div className="mb-2">
+          <div className="mb-4">
             <div className="flex space-x-4">
               <label className={`flex items-center cursor-pointer ${!currentLocation ? 'opacity-50' : ''}`}>
                 <input
@@ -272,7 +273,7 @@ export const RouteOptimizationComponent: React.FC<RouteOptimizationComponentProp
             }
             placeholder="位置を設定中..."
             readOnly
-            className="bg-gray-50"
+            className="bg-white border-gray-300"
           />
           
           {/* Debug info */}
@@ -283,7 +284,11 @@ export const RouteOptimizationComponent: React.FC<RouteOptimizationComponentProp
           )}
         </div>
         
-        <div>
+        {/* 搬送先病院セクション */}
+        <div className="bg-blue-50 rounded-lg p-4">
+          <label className="block text-lg font-semibold text-gray-900 mb-3">
+            🏥 搬送先病院
+          </label>
           <HospitalSelector
             currentLocation={currentLocation}
             selectedHospital={selectedHospital || undefined}
@@ -291,9 +296,10 @@ export const RouteOptimizationComponent: React.FC<RouteOptimizationComponentProp
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            ルート優先度
+        {/* ルート優先度セクション */}
+        <div className="bg-green-50 rounded-lg p-4">
+          <label className="block text-lg font-semibold text-gray-900 mb-3">
+            ⚡ ルート優先度
           </label>
           <select
             value={routeRequest.routePreference}
@@ -301,12 +307,17 @@ export const RouteOptimizationComponent: React.FC<RouteOptimizationComponentProp
               ...prev,
               routePreference: e.target.value as any
             }))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
           >
-            <option value="fastest">最速</option>
-            <option value="most_stable">最安定</option>
-            <option value="shortest">最短距離</option>
+            <option value="fastest">⚡ 最速ルート（時間を最優先）</option>
+            <option value="most_stable">🎯 最安定ルート（遅延リスクを最小化）</option>
+            <option value="shortest">📏 最短距離ルート（燃料消費を抑制）</option>
           </select>
+          <p className="mt-2 text-sm text-gray-600">
+            {routeRequest.routePreference === 'fastest' && '交通状況を考慮した最も早い到着時間のルートを優先します。'}
+            {routeRequest.routePreference === 'most_stable' && '交通量の変動が少なく、予定通りの到着が期待できるルートを優先します。'}
+            {routeRequest.routePreference === 'shortest' && '距離が最も短いルートを優先します。時間は多少かかる場合があります。'}
+          </p>
         </div>
       </div>
 
