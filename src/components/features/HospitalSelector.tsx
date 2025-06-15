@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { EmergencyHospital, getNearbyHospitals, emergencyHospitals } from '@/data/emergencyHospitals';
+import { EmergencyHospital, emergencyHospitals } from '@/data/emergencyHospitals';
 
 interface HospitalSelectorProps {
   currentLocation?: { latitude: number; longitude: number };
@@ -9,7 +9,6 @@ interface HospitalSelectorProps {
 }
 
 export const HospitalSelector: React.FC<HospitalSelectorProps> = ({
-  currentLocation,
   selectedHospital,
   onHospitalSelect,
   className = ''
