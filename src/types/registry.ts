@@ -1,5 +1,24 @@
 import { Timestamp } from 'firebase/firestore';
 
+// チームメンバーの型定義
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: 'doctor' | 'emergency-nurse' | 'resident' | 'nurse' | 'other';
+  qualification?: string; // 資格情報
+  employeeId?: string; // 職員ID
+  department?: string; // 所属部署
+}
+
+export interface TeamMemberOnScene {
+  memberId: string;
+  member: TeamMember;
+  arrivalTime: Timestamp;
+  departureTime?: Timestamp;
+  primaryRole: string; // 現場での主な役割
+  notes?: string; // 特記事項
+}
+
 export interface DoctorCarRegistry {
   id: string;
   caseId: string;
@@ -60,6 +79,9 @@ export interface DoctorCarRegistry {
   
   // 出場車輌
   dispatchVehicle: string;
+  
+  // 現場活動メンバー
+  teamMembers: TeamMemberOnScene[];
   
   // 発生場所
   location: {

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Input, LoadingSpinner } from '@/components/common';
-import { DoctorCarRegistry } from '@/types/registry';
+import { DoctorCarRegistry, TeamMemberOnScene } from '@/types/registry';
 import { useCaseStore, useAuthStore } from '@/stores';
 import { registryService } from '@/services/registryService';
+import { TeamMemberSelector } from './TeamMemberSelector';
 
 export const RegistryForm: React.FC = () => {
   const { caseId } = useParams<{ caseId: string }>();
@@ -13,7 +14,7 @@ export const RegistryForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [registry, setRegistry] = useState<Partial<DoctorCarRegistry>>({});
-  const [activeTab, setActiveTab] = useState<'basic' | 'timeline' | 'vitals' | 'category' | 'hospital'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'team' | 'timeline' | 'vitals' | 'category' | 'hospital'>('basic');
 
   useEffect(() => {
     if (caseId) {
@@ -45,6 +46,7 @@ export const RegistryForm: React.FC = () => {
           registryNumber: generateRegistryNumber(),
           createdBy: userInfo?.uid || '',
           isCompleted: false,
+          teamMembers: [], // 空の配列で初期化
           // 時間経過のデフォルト値を設定
           timelineEms: {
             awareness: createDefaultTimestamp(0) as any,
@@ -72,6 +74,13 @@ export const RegistryForm: React.FC = () => {
   const generateRegistryNumber = (): string => {
     const date = new Date();
     return `DCR-${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}-${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}`;
+  };
+
+  const handleTeamMembersChange = (members: TeamMemberOnScene[]) => {
+    setRegistry(prev => ({
+      ...prev,
+      teamMembers: members
+    }));
   };
 
   const handleSave = async (isComplete: boolean = false) => {
@@ -164,6 +173,7 @@ export const RegistryForm: React.FC = () => {
             <nav className="-mb-px flex space-x-8 px-6">
               {[
                 { id: 'basic', label: 'I 基本情報' },
+                { id: 'team', label: '現場メンバー' },
                 { id: 'timeline', label: '時間経過・バイタル' },
                 { id: 'vitals', label: '搬送先・分類' },
                 { id: 'category', label: 'II 分類別詳細' },
@@ -187,6 +197,18 @@ export const RegistryForm: React.FC = () => {
           {/* タブコンテンツ */}
           <div className="p-6">
             {activeTab === 'basic' && <BasicInfoTab registry={registry} setRegistry={setRegistry} />}
+            {activeTab === 'team' && (
+              <div>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">現場活動メンバー</h3>
+                <p className="text-sm text-gray-600 mb-6">
+                  現場に出動したメンバーを選択し、到着時刻や役割を記録してください。
+                </p>
+                <TeamMemberSelector
+                  selectedMembers={registry.teamMembers || []}
+                  onMembersChange={handleTeamMembersChange}
+                />
+              </div>
+            )}
             {activeTab === 'timeline' && <TimelineTab registry={registry} setRegistry={setRegistry} />}
             {activeTab === 'vitals' && <VitalsDestinationTab registry={registry} setRegistry={setRegistry} />}
             {activeTab === 'category' && <CategoryTab registry={registry} setRegistry={setRegistry} />}

@@ -17,6 +17,19 @@ export interface EmergencyHospital {
 export const emergencyHospitals: EmergencyHospital[] = [
   {
     id: "hospital-001",
+    name: "東京科学大学病院",
+    latitude: 35.699374,
+    longitude: 139.762881,
+    address: "東京都文京区湯島1-5-45",
+    phone: "03-3813-6111",
+    emergencyLevel: "tertiary",
+    specialties: ["救急科", "外科", "内科", "循環器科", "脳神経外科", "整形外科"],
+    hasER: true,
+    hasICU: true,
+    acceptsTrauma: true
+  },
+  {
+    id: "hospital-002",
     name: "東京大学医学部附属病院",
     latitude: 35.7016,
     longitude: 139.7658,
@@ -29,7 +42,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-002", 
+    id: "hospital-003", 
     name: "順天堂大学医学部附属順天堂医院",
     latitude: 35.7022,
     longitude: 139.7644,
@@ -42,20 +55,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-003",
-    name: "東京医科歯科大学医学部附属病院",
-    latitude: 35.7024,
-    longitude: 139.7635,
-    address: "東京都文京区湯島1-5-45",
-    phone: "03-3813-6111",
-    emergencyLevel: "tertiary",
-    specialties: ["救急科", "外科", "内科", "循環器科"],
-    hasER: true,
-    hasICU: true,
-    acceptsTrauma: true
-  },
-  {
-    id: "hospital-004",
+    id: "hospital-006",
     name: "日本医科大学付属病院",
     latitude: 35.7069,
     longitude: 139.7533,
@@ -68,7 +68,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-005",
+    id: "hospital-007",
     name: "慈恵会医科大学附属病院",
     latitude: 35.6678,
     longitude: 139.7456,
@@ -81,7 +81,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-006",
+    id: "hospital-008",
     name: "聖路加国際病院",
     latitude: 35.6724,
     longitude: 139.7745,
@@ -94,7 +94,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-007",
+    id: "hospital-009",
     name: "東京都立墨東病院",
     latitude: 35.7118,
     longitude: 139.8267,
@@ -107,7 +107,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-008",
+    id: "hospital-010",
     name: "国立国際医療研究センター病院",
     latitude: 35.7011,
     longitude: 139.7280,
@@ -120,7 +120,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-009",
+    id: "hospital-011",
     name: "東京医科大学病院",
     latitude: 35.6959,
     longitude: 139.7254,
@@ -133,7 +133,7 @@ export const emergencyHospitals: EmergencyHospital[] = [
     acceptsTrauma: true
   },
   {
-    id: "hospital-010",
+    id: "hospital-012",
     name: "虎の門病院",
     latitude: 35.6694,
     longitude: 139.7478,
@@ -164,13 +164,22 @@ export const getNearbyHospitals = (
     return R * c;
   };
 
-  return emergencyHospitals
-    .map(hospital => ({
+  console.log('getNearbyHospitals called with:', { currentLat, currentLon, maxDistance });
+  console.log('Total hospitals available:', emergencyHospitals.length);
+  
+  const hospitalsWithDistance = emergencyHospitals.map(hospital => {
+    const distance = calculateDistance(currentLat, currentLon, hospital.latitude, hospital.longitude);
+    console.log(`Distance to ${hospital.name}: ${distance.toFixed(2)}km`);
+    return {
       ...hospital,
-      distance: calculateDistance(currentLat, currentLon, hospital.latitude, hospital.longitude)
-    }))
-    .filter(hospital => hospital.distance! <= maxDistance)
-    .sort((a, b) => a.distance! - b.distance!);
+      distance
+    };
+  });
+
+  const filteredHospitals = hospitalsWithDistance.filter(hospital => hospital.distance! <= maxDistance);
+  console.log('Hospitals within range:', filteredHospitals.length, filteredHospitals.map(h => `${h.name} (${h.distance?.toFixed(2)}km)`));
+
+  return filteredHospitals.sort((a, b) => a.distance! - b.distance!);
 };
 
 // 救急レベルでフィルタリング

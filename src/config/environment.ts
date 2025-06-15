@@ -43,7 +43,7 @@ const environments = {
 };
 
 const currentEnv = import.meta.env.MODE as keyof typeof environments;
-const isDemoMode = import.meta.env.VITE_MODE === 'demo' || currentEnv === 'demo';
+const isDemoMode = true; // 強制的にデモモードを有効化
 
 console.log('Environment check:', {
   MODE: import.meta.env.MODE,

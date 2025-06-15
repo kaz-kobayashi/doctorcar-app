@@ -19,6 +19,12 @@ export interface Case {
     age?: number;
     gender?: 'male' | 'female' | 'other';
     name?: string;
+    buildingInfo?: {
+      buildingName: string;
+      floor: number;
+      description?: string;
+      accessNotes?: string;
+    };
   };
   sceneLocation: GeoPoint;
   hospitalLocation: GeoPoint;

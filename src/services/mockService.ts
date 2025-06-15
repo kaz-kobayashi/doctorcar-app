@@ -47,7 +47,7 @@ export const DEMO_CASES: Case[] = [
       name: '田中 一郎'
     },
     sceneLocation: createMockGeoPoint(35.689487, 139.691706), // 新宿駅 (~2.5km)
-    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院 (~1km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
     createdAt: createMockTimestamp(new Date('2024-12-14T10:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T10:30:00Z')) as any
   },
@@ -62,7 +62,7 @@ export const DEMO_CASES: Case[] = [
       name: '鈴木 恵子'
     },
     sceneLocation: createMockGeoPoint(35.687846, 139.719947), // 信濃町駅 (~4km)
-    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
     createdAt: createMockTimestamp(new Date('2024-12-13T14:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-13T16:45:00Z')) as any
   },
@@ -76,7 +76,7 @@ export const DEMO_CASES: Case[] = [
       gender: 'male'
     },
     sceneLocation: createMockGeoPoint(35.686611, 139.728694), // 四谷三丁目駅 (~3.5km)
-    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
     createdAt: createMockTimestamp(new Date('2024-12-14T11:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T11:00:00Z')) as any
   },
@@ -91,9 +91,114 @@ export const DEMO_CASES: Case[] = [
       name: '高橋 美奈子'
     },
     sceneLocation: createMockGeoPoint(35.694611, 139.738028), // 曙橋駅 (~2.5km)
-    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
     createdAt: createMockTimestamp(new Date('2024-12-14T12:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T12:15:00Z')) as any
+  },
+  {
+    id: 'case-005',
+    caseName: '2024-12-14 六本木ヒルズ47階 急病',
+    status: 'dispatched',
+    teamId: 'doctor-001',
+    patientInfo: {
+      age: 58,
+      gender: 'male',
+      name: '伊藤 健一',
+      buildingInfo: {
+        buildingName: '六本木ヒルズ森タワー',
+        floor: 47,
+        description: 'エレベーターホール付近',
+        accessNotes: '業務用エレベーター使用可、警備員待機中'
+      }
+    },
+    sceneLocation: createMockGeoPoint(35.660419, 139.729435), // 六本木ヒルズ (~5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
+    createdAt: createMockTimestamp(new Date('2024-12-14T13:00:00Z')) as any,
+    updatedAt: createMockTimestamp(new Date('2024-12-14T13:05:00Z')) as any
+  },
+  {
+    id: 'case-006',
+    caseName: '2024-12-14 東京駅八重洲中央口 心臓発作',
+    status: 'on_scene',
+    teamId: 'doctor-001',
+    patientInfo: {
+      age: 72,
+      gender: 'male',
+      name: '山口 正夫',
+      buildingInfo: {
+        buildingName: '東京駅',
+        floor: 1,
+        description: '八重洲中央口改札内、みどりの窓口前',
+        accessNotes: '駅員誘導あり、混雑により搬送経路確保中'
+      }
+    },
+    sceneLocation: createMockGeoPoint(35.680889, 139.767981), // 東京駅 (~2.5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
+    createdAt: createMockTimestamp(new Date('2024-12-14T14:00:00Z')) as any,
+    updatedAt: createMockTimestamp(new Date('2024-12-14T14:10:00Z')) as any
+  },
+  {
+    id: 'case-007',
+    caseName: '2024-12-14 虎ノ門ヒルズ35階 呼吸困難',
+    status: 'completed',
+    teamId: 'doctor-001',
+    patientInfo: {
+      age: 41,
+      gender: 'female',
+      name: '村田 由美子',
+      buildingInfo: {
+        buildingName: '虎ノ門ヒルズ森タワー',
+        floor: 35,
+        description: 'オフィスフロア会議室C',
+        accessNotes: '専用エレベーター使用、ビル管理者対応済'
+      }
+    },
+    sceneLocation: createMockGeoPoint(35.666938, 139.749444), // 虎ノ門ヒルズ (~4km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
+    createdAt: createMockTimestamp(new Date('2024-12-14T09:00:00Z')) as any,
+    updatedAt: createMockTimestamp(new Date('2024-12-14T10:30:00Z')) as any
+  },
+  {
+    id: 'case-008',
+    caseName: '2024-12-14 大手町駅丸の内線ホーム 転倒事故',
+    status: 'dispatched',
+    teamId: 'doctor-001',
+    patientInfo: {
+      age: 35,
+      gender: 'female',
+      name: '小林 真由美',
+      buildingInfo: {
+        buildingName: '大手町駅',
+        floor: -2,
+        description: '丸の内線ホーム中央付近',
+        accessNotes: '駅員誘導、エスカレーター停止済、担架搬送ルート確保'
+      }
+    },
+    sceneLocation: createMockGeoPoint(35.686292, 139.766103), // 大手町駅 (~1.5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
+    createdAt: createMockTimestamp(new Date('2024-12-14T15:00:00Z')) as any,
+    updatedAt: createMockTimestamp(new Date('2024-12-14T15:00:00Z')) as any
+  },
+  {
+    id: 'case-009',
+    caseName: '2024-12-14 渋谷スクランブルスクエア39階 意識消失',
+    status: 'on_scene',
+    teamId: 'doctor-001',
+    patientInfo: {
+      age: 63,
+      gender: 'male',
+      name: '松本 太一',
+      buildingInfo: {
+        buildingName: '渋谷スクランブルスクエア',
+        floor: 39,
+        description: 'スカイロビー展望エリア',
+        accessNotes: '高速エレベーター優先使用可、スタッフ待機'
+      }
+    },
+    sceneLocation: createMockGeoPoint(35.658514, 139.702249), // 渋谷スクランブルスクエア (~5.5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 東京科学大学病院
+    createdAt: createMockTimestamp(new Date('2024-12-14T16:00:00Z')) as any,
+    updatedAt: createMockTimestamp(new Date('2024-12-14T16:20:00Z')) as any
   }
 ];
 
@@ -126,6 +231,17 @@ export const demoStorage = {
     const stored = localStorage.getItem(STORAGE_KEYS.CASES);
     if (stored) {
       const cases = JSON.parse(stored);
+      // Check if we have all the demo cases (case-001 through case-009)
+      const storedCaseIds = cases.map((c: any) => c.id);
+      const demoCaseIds = DEMO_CASES.map(c => c.id);
+      const hasAllCases = demoCaseIds.every(id => storedCaseIds.includes(id));
+      
+      // If not all demo cases are present, update localStorage with the full set
+      if (!hasAllCases) {
+        demoStorage.setCases(DEMO_CASES);
+        return DEMO_CASES;
+      }
+      
       // Timestampオブジェクトを復元
       return cases.map((case_: any) => ({
         ...case_,
@@ -139,6 +255,13 @@ export const demoStorage = {
     demoStorage.setCases(DEMO_CASES);
     return DEMO_CASES;
   }
+};
+
+// デモデータのリフレッシュ関数（開発用）
+export const refreshDemoData = () => {
+  localStorage.removeItem(STORAGE_KEYS.CASES);
+  demoStorage.setCases(DEMO_CASES);
+  console.log('Demo data refreshed with all cases:', DEMO_CASES.map(c => c.id));
 };
 
 // デモ用認証サービス

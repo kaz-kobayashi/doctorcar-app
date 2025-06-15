@@ -5,30 +5,13 @@ import { ProtectedRoute } from '@/components/auth';
 import { ErrorBoundary } from '@/components/common';
 import { LoginPage } from '@/pages/LoginPage';
 
-// ページコンポーネントの動的インポート（Code Splitting）
-const CaseListPage = React.lazy(() => 
-  import('./pages/CaseListPage').then(module => ({ default: module.CaseListPage }))
-);
-
-const CaseDetailPage = React.lazy(() => 
-  import('./pages/CaseDetailPage').then(module => ({ default: module.CaseDetailPage }))
-);
-
-const CreateCasePage = React.lazy(() => 
-  import('./pages/CreateCasePage').then(module => ({ default: module.CreateCasePage }))
-);
-
-const RegistryFormPage = React.lazy(() => 
-  import('./pages/RegistryFormPage').then(module => ({ default: module.RegistryFormPage }))
-);
-
-const RegistryListPage = React.lazy(() => 
-  import('./pages/RegistryListPage').then(module => ({ default: module.RegistryListPage }))
-);
-
-const RouteOptimizationPage = React.lazy(() => 
-  import('./pages/RouteOptimizationPage').then(module => ({ default: module.RouteOptimizationPage }))
-);
+// ページコンポーネントの静的インポート
+import { CaseListPage } from './pages/CaseListPage';
+import { CaseDetailPage } from './pages/CaseDetailPage';
+import { CreateCasePage } from './pages/CreateCasePage';
+import { RegistryFormPage } from './pages/RegistryFormPage';
+import { RegistryListPage } from './pages/RegistryListPage';
+import { RouteOptimizationPage } from './pages/RouteOptimizationPage';
 
 // 未承認ページ
 const UnauthorizedPage = () => (
@@ -63,13 +46,6 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <React.Suspense 
-          fallback={
-            <div className="min-h-screen flex items-center justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-medical-primary"></div>
-            </div>
-          }
-        >
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
@@ -124,7 +100,6 @@ function App() {
             <Route path="/" element={<Navigate to="/cases" replace />} />
             <Route path="*" element={<Navigate to="/cases" replace />} />
           </Routes>
-        </React.Suspense>
       </BrowserRouter>
     </ErrorBoundary>
   );

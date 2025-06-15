@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { EmergencyHospital, getNearbyHospitals } from '@/data/emergencyHospitals';
+import { EmergencyHospital, getNearbyHospitals, emergencyHospitals } from '@/data/emergencyHospitals';
 
 interface HospitalSelectorProps {
   currentLocation?: { latitude: number; longitude: number };
@@ -19,18 +19,25 @@ export const HospitalSelector: React.FC<HospitalSelectorProps> = ({
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredHospitals, setFilteredHospitals] = useState<EmergencyHospital[]>([]);
 
-  // 現在地から近い病院を取得
+  // 病院リストを取得（常に東京科学大学病院を含める）
   useEffect(() => {
-    if (currentLocation) {
-      const hospitals = getNearbyHospitals(
-        currentLocation.latitude,
-        currentLocation.longitude,
-        15 // 15km以内
-      );
-      setNearbyHospitals(hospitals);
-      setFilteredHospitals(hospitals);
-    }
-  }, [currentLocation]);
+    console.log('HospitalSelector: Loading all hospitals...');
+    console.log('HospitalSelector: emergencyHospitals array:', emergencyHospitals);
+    
+    // 直接全病院を使用（距離制限なし）
+    const allHospitals = emergencyHospitals.map(hospital => ({
+      ...hospital,
+      distance: 0 // ダミーの距離
+    }));
+    
+    // 東京科学大学病院が含まれているか確認
+    const tokyoScienceHospital = allHospitals.find(h => h.name === "東京科学大学病院");
+    console.log('東京科学大学病院が見つかりました:', tokyoScienceHospital);
+    
+    console.log('HospitalSelector: All hospitals loaded:', allHospitals.length, allHospitals.map(h => h.name));
+    setNearbyHospitals(allHospitals);
+    setFilteredHospitals(allHospitals);
+  }, []);
 
   // 検索フィルタリング
   useEffect(() => {
@@ -148,7 +155,7 @@ export const HospitalSelector: React.FC<HospitalSelectorProps> = ({
         <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-96 overflow-y-auto">
           {filteredHospitals.length === 0 ? (
             <div className="p-4 text-center text-gray-500">
-              {currentLocation ? '条件に合う病院が見つかりません' : '現在地を取得中...'}
+              病院が見つかりません
             </div>
           ) : (
             <div className="py-1">

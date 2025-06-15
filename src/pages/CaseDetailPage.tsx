@@ -287,7 +287,33 @@ export const CaseDetailPage: React.FC = () => {
                 <LocationTracker onLocationUpdate={handleLocationUpdate} />
               </div>
               
-              {/* 建物情報 */}
+              {/* 建物情報（事案データから） */}
+              {currentCase.patientInfo.buildingInfo && (
+                <div className="mt-4 bg-blue-50 rounded-lg p-4 border border-blue-200">
+                  <h4 className="text-sm font-medium text-blue-900 mb-2">📍 現場情報</h4>
+                  <div className="text-sm text-blue-800">
+                    <div className="mb-1">
+                      <span className="font-medium">建物:</span> {currentCase.patientInfo.buildingInfo.buildingName}
+                    </div>
+                    <div className="mb-1">
+                      <span className="font-medium">階数:</span> {currentCase.patientInfo.buildingInfo.floor}階
+                    </div>
+                    {currentCase.patientInfo.buildingInfo.description && (
+                      <div className="mb-1">
+                        <span className="font-medium">詳細:</span> {currentCase.patientInfo.buildingInfo.description}
+                      </div>
+                    )}
+                    {currentCase.patientInfo.buildingInfo.accessNotes && (
+                      <div className="mt-2 p-2 bg-blue-100 rounded">
+                        <span className="font-medium">アクセス情報:</span><br />
+                        {currentCase.patientInfo.buildingInfo.accessNotes}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* 建物情報（座標から自動検索） */}
               <div className="mt-4">
                 <BuildingInfoComponent location={currentCase.sceneLocation} />
               </div>
