@@ -4,6 +4,8 @@ import { Button, LoadingSpinner } from '@/components/common';
 import { useCaseStore, useAuthStore } from '@/stores';
 import { Case } from '@/types';
 import { CASE_STATUS } from '@/constants';
+import { getSceneLocationsWithinRange, SceneLocation } from '@/data/sceneLocations';
+import { emergencyHospitals } from '@/data/emergencyHospitals';
 
 export const CreateCasePage: React.FC = () => {
   const navigate = useNavigate();
@@ -45,33 +47,28 @@ export const CreateCasePage: React.FC = () => {
     }
   };
 
-  const setPresetLocation = (type: 'scene' | 'hospital', preset: string) => {
-    const presets = {
-      '渋谷駅': { lat: '35.658584', lng: '139.701442' },
-      '新宿駅': { lat: '35.689487', lng: '139.691706' },
-      '品川駅': { lat: '35.627701', lng: '139.740689' },
-      '東京大学病院': { lat: '35.665498', lng: '139.686567' },
-      '慶應義塾大学病院': { lat: '35.649519', lng: '139.701754' },
-      '東京医科大学病院': { lat: '35.693176', lng: '139.705148' }
-    };
+  const setSceneLocation = (location: SceneLocation) => {
+    setFormData({
+      ...formData,
+      sceneLatitude: location.latitude.toString(),
+      sceneLongitude: location.longitude.toString()
+    });
+  };
 
-    const location = presets[preset as keyof typeof presets];
-    if (location) {
-      if (type === 'scene') {
-        setFormData({
-          ...formData,
-          sceneLatitude: location.lat,
-          sceneLongitude: location.lng
-        });
-      } else {
-        setFormData({
-          ...formData,
-          hospitalLatitude: location.lat,
-          hospitalLongitude: location.lng
-        });
-      }
+  const setHospitalLocation = (hospitalId: string) => {
+    const hospital = emergencyHospitals.find(h => h.id === hospitalId);
+    if (hospital) {
+      setFormData({
+        ...formData,
+        hospitalLatitude: hospital.latitude.toString(),
+        hospitalLongitude: hospital.longitude.toString()
+      });
     }
   };
+
+
+  // 6km範囲内の事案場所を取得
+  const sceneLocationsInRange = getSceneLocationsWithinRange(6);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -245,41 +242,57 @@ export const CreateCasePage: React.FC = () => {
 
             {/* 現場位置 */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">現場位置</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                現場位置 
+                <span className="text-sm text-gray-500 ml-2">
+                  (基地病院から6km以内)
+                </span>
+              </h3>
               <div className="space-y-4">
-                <div className="flex space-x-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    事案発生場所を選択
+                  </label>
+                  <select
+                    value=""
+                    onChange={(e) => {
+                      const selectedLocation = sceneLocationsInRange.find(loc => loc.id === e.target.value);
+                      if (selectedLocation) {
+                        setSceneLocation(selectedLocation);
+                      }
+                    }}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-medical-primary mb-2"
+                  >
+                    <option value="">-- 場所を選択してください --</option>
+                    {sceneLocationsInRange.map((location) => (
+                      <option key={location.id} value={location.id}>
+                        {location.name} ({location.distance?.toFixed(1)}km) - {location.address}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="flex space-x-2 flex-wrap gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={getCurrentLocation}
                   >
-                    現在地を取得
+                    📍 現在地を取得
                   </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPresetLocation('scene', '渋谷駅')}
-                  >
-                    渋谷駅
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPresetLocation('scene', '新宿駅')}
-                  >
-                    新宿駅
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPresetLocation('scene', '品川駅')}
-                  >
-                    品川駅
-                  </Button>
+                  {sceneLocationsInRange.slice(0, 4).map((location) => (
+                    <Button
+                      key={location.id}
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSceneLocation(location)}
+                      className="text-xs"
+                    >
+                      {location.name}
+                    </Button>
+                  ))}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -316,31 +329,41 @@ export const CreateCasePage: React.FC = () => {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">搬送先病院</h3>
               <div className="space-y-4">
-                <div className="flex space-x-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPresetLocation('hospital', '東京大学病院')}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    救急対応病院を選択
+                  </label>
+                  <select
+                    value=""
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        setHospitalLocation(e.target.value);
+                      }
+                    }}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-medical-primary mb-2"
                   >
-                    東京大学病院
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPresetLocation('hospital', '慶應義塾大学病院')}
-                  >
-                    慶應義塾大学病院
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPresetLocation('hospital', '東京医科大学病院')}
-                  >
-                    東京医科大学病院
-                  </Button>
+                    <option value="">-- 病院を選択してください --</option>
+                    {emergencyHospitals.map((hospital) => (
+                      <option key={hospital.id} value={hospital.id}>
+                        {hospital.name} ({hospital.emergencyLevel === 'tertiary' ? '三次救急' : hospital.emergencyLevel === 'secondary' ? '二次救急' : '一次救急'}) - {hospital.address}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="flex space-x-2 flex-wrap gap-2">
+                  {emergencyHospitals.slice(0, 3).map((hospital) => (
+                    <Button
+                      key={hospital.id}
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setHospitalLocation(hospital.id)}
+                      className="text-xs"
+                    >
+                      {hospital.name}
+                    </Button>
+                  ))}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>

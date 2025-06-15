@@ -1,0 +1,1 @@
+export { RegistryForm } from './RegistryForm';

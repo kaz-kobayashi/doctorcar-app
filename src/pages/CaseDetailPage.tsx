@@ -4,6 +4,7 @@ import { useCaseStore, useAuthStore } from '@/stores';
 import { LoadingSpinner, Button } from '@/components/common';
 import { CASE_STATUS } from '@/constants';
 import { MapComponent, VitalSignsComponent, ChatComponent, TreatmentComponent, LocationTracker, BuildingInfoComponent } from '@/components/features';
+import { RouteOptimizationComponent } from '@/components/features/RouteOptimization';
 
 export const CaseDetailPage: React.FC = () => {
   const { caseId } = useParams<{ caseId: string }>();
@@ -13,6 +14,8 @@ export const CaseDetailPage: React.FC = () => {
   const isMountedRef = useRef(true);
   const [activeTab, setActiveTab] = useState<'vitals' | 'treatments'>('vitals');
   const [currentLocation, setCurrentLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [selectedRoute, setSelectedRoute] = useState<any>(null);
+  const [selectedHospital, setSelectedHospital] = useState<any>(null);
   
   // ステータス更新処理
   const handleStatusUpdate = async (newStatus: string) => {
@@ -216,6 +219,14 @@ export const CaseDetailPage: React.FC = () => {
                 ) : null;
               })()}
               
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => navigate(`/cases/${caseId}/registry`)}
+              >
+                レジストリ入力
+              </Button>
+              
               <div className="text-sm text-gray-700">
                 <span className="font-medium">{userInfo?.name}</span>
               </div>
@@ -236,24 +247,38 @@ export const CaseDetailPage: React.FC = () => {
                   sceneLocation={currentCase.sceneLocation}
                   hospitalLocation={currentCase.hospitalLocation}
                   currentLocation={currentLocation || undefined}
+                  selectedRoute={selectedRoute}
+                  selectedHospital={selectedHospital}
+                  showFullscreenButton={true}
                 />
               </div>
               <div className="mt-3 text-sm text-gray-600">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-red-600 rounded-full mr-1"></div>
-                    <span>現場</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-blue-600 rounded-full mr-1"></div>
-                    <span>搬送先病院</span>
-                  </div>
-                  {currentLocation && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
                     <div className="flex items-center">
-                      <div className="w-3 h-3 bg-green-600 rounded-full mr-1"></div>
-                      <span>現在地</span>
+                      <div className="w-3 h-3 bg-red-600 rounded-full mr-1"></div>
+                      <span>現場</span>
                     </div>
-                  )}
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full mr-1"></div>
+                      <span>搬送先病院</span>
+                    </div>
+                    {currentLocation && (
+                      <div className="flex items-center">
+                        <div className="w-3 h-3 bg-green-600 rounded-full mr-1"></div>
+                        <span>現在地</span>
+                      </div>
+                    )}
+                    {selectedRoute && (
+                      <div className="flex items-center">
+                        <div className="w-4 h-1 bg-blue-500 rounded mr-1"></div>
+                        <span>ルート</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    📱 右上ボタンで全画面表示
+                  </div>
                 </div>
               </div>
               
@@ -265,6 +290,32 @@ export const CaseDetailPage: React.FC = () => {
               {/* 建物情報 */}
               <div className="mt-4">
                 <BuildingInfoComponent location={currentCase.sceneLocation} />
+              </div>
+              
+              {/* ルート最適化 */}
+              <div className="mt-6 border-t pt-4">
+                <h4 className="text-md font-medium text-gray-900 mb-4">🚗 ルート最適化</h4>
+                <RouteOptimizationComponent
+                  currentLocation={currentLocation || undefined}
+                  sceneLocation={{
+                    latitude: currentCase.sceneLocation.latitude,
+                    longitude: currentCase.sceneLocation.longitude
+                  }}
+                  onRouteSelected={(route) => {
+                    console.log('Route selected:', route);
+                    console.log('Route coordinates:', route?.coordinates);
+                    console.log('Route coordinates length:', route?.coordinates?.length);
+                    setSelectedRoute(route);
+                  }}
+                  onNavigationStart={(route) => {
+                    console.log('Navigation started:', route);
+                    alert('ナビゲーションを開始しました');
+                  }}
+                  onHospitalSelected={(hospital) => {
+                    console.log('Hospital selected:', hospital);
+                    setSelectedHospital(hospital);
+                  }}
+                />
               </div>
             </div>
             

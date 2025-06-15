@@ -18,6 +18,18 @@ const CreateCasePage = React.lazy(() =>
   import('./pages/CreateCasePage').then(module => ({ default: module.CreateCasePage }))
 );
 
+const RegistryFormPage = React.lazy(() => 
+  import('./pages/RegistryFormPage').then(module => ({ default: module.RegistryFormPage }))
+);
+
+const RegistryListPage = React.lazy(() => 
+  import('./pages/RegistryListPage').then(module => ({ default: module.RegistryListPage }))
+);
+
+const RouteOptimizationPage = React.lazy(() => 
+  import('./pages/RouteOptimizationPage').then(module => ({ default: module.RouteOptimizationPage }))
+);
+
 // 未承認ページ
 const UnauthorizedPage = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -82,6 +94,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CaseDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cases/:caseId/registry"
+              element={
+                <ProtectedRoute>
+                  <RegistryFormPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/registries"
+              element={
+                <ProtectedRoute>
+                  <RegistryListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/route-optimization"
+              element={
+                <ProtectedRoute>
+                  <RouteOptimizationPage />
                 </ProtectedRoute>
               }
             />

@@ -34,11 +34,11 @@ export const DEMO_USERS: Record<string, AppUser> = {
   }
 };
 
-// デモ用事案データ
+// デモ用事案データ (35.701835,139.763417から6km範囲内)
 export const DEMO_CASES: Case[] = [
   {
     id: 'case-001',
-    caseName: '2024-12-14 渋谷駅前 交通外傷',
+    caseName: '2024-12-14 新宿駅南口 交通外傷',
     status: 'on_scene',
     teamId: 'doctor-001',
     patientInfo: {
@@ -46,14 +46,14 @@ export const DEMO_CASES: Case[] = [
       gender: 'male',
       name: '田中 一郎'
     },
-    sceneLocation: createMockGeoPoint(35.658584, 139.701442), // 渋谷駅
-    hospitalLocation: createMockGeoPoint(35.665498, 139.686567), // 東京大学病院
+    sceneLocation: createMockGeoPoint(35.689487, 139.691706), // 新宿駅 (~2.5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院 (~1km)
     createdAt: createMockTimestamp(new Date('2024-12-14T10:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T10:30:00Z')) as any
   },
   {
     id: 'case-002',
-    caseName: '2024-12-13 新宿区内 心肺停止',
+    caseName: '2024-12-13 信濃町駅前 心肺停止',
     status: 'completed',
     teamId: 'doctor-001',
     patientInfo: {
@@ -61,28 +61,28 @@ export const DEMO_CASES: Case[] = [
       gender: 'female',
       name: '鈴木 恵子'
     },
-    sceneLocation: createMockGeoPoint(35.689487, 139.691706), // 新宿駅
-    hospitalLocation: createMockGeoPoint(35.665498, 139.686567),
+    sceneLocation: createMockGeoPoint(35.687846, 139.719947), // 信濃町駅 (~4km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院
     createdAt: createMockTimestamp(new Date('2024-12-13T14:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-13T16:45:00Z')) as any
   },
   {
     id: 'case-003',
-    caseName: '2024-12-14 品川区 意識不明',
+    caseName: '2024-12-14 四谷三丁目 意識不明',
     status: 'dispatched',
     teamId: 'doctor-001',
     patientInfo: {
       age: 28,
       gender: 'male'
     },
-    sceneLocation: createMockGeoPoint(35.627701, 139.740689), // 品川駅
-    hospitalLocation: createMockGeoPoint(35.665498, 139.686567),
+    sceneLocation: createMockGeoPoint(35.686611, 139.728694), // 四谷三丁目駅 (~3.5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院
     createdAt: createMockTimestamp(new Date('2024-12-14T11:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T11:00:00Z')) as any
   },
   {
     id: 'case-004',
-    caseName: '2024-12-14 東京駅 転落事故',
+    caseName: '2024-12-14 曙橋駅 転落事故',
     status: 'on_scene',
     teamId: 'doctor-001',
     patientInfo: {
@@ -90,8 +90,8 @@ export const DEMO_CASES: Case[] = [
       gender: 'female',
       name: '高橋 美奈子'
     },
-    sceneLocation: createMockGeoPoint(35.6812, 139.7671), // 東京駅
-    hospitalLocation: createMockGeoPoint(35.665498, 139.686567),
+    sceneLocation: createMockGeoPoint(35.694611, 139.738028), // 曙橋駅 (~2.5km)
+    hospitalLocation: createMockGeoPoint(35.699374, 139.762881), // 慶應義塾大学病院
     createdAt: createMockTimestamp(new Date('2024-12-14T12:00:00Z')) as any,
     updatedAt: createMockTimestamp(new Date('2024-12-14T12:15:00Z')) as any
   }

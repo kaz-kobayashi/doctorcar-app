@@ -91,3 +91,9 @@ export class AppError extends Error {
 
 // 建物情報関連
 export * from './buildingInfo';
+
+// レジストリ関連
+export * from './registry';
+
+// ルート最適化関連
+export * from './route';
