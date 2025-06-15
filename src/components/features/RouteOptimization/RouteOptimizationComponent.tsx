@@ -311,12 +311,12 @@ export const RouteOptimizationComponent: React.FC<RouteOptimizationComponentProp
           >
             <option value="fastest">⚡ 最速ルート（時間を最優先）</option>
             <option value="most_stable">🎯 最安定ルート（遅延リスクを最小化）</option>
-            <option value="shortest">📏 最短距離ルート（燃料消費を抑制）</option>
+            <option value="shortest">📏 最短距離ルート</option>
           </select>
           <p className="mt-2 text-sm text-gray-600">
             {routeRequest.routePreference === 'fastest' && '交通状況を考慮した最も早い到着時間のルートを優先します。'}
             {routeRequest.routePreference === 'most_stable' && '交通量の変動が少なく、予定通りの到着が期待できるルートを優先します。'}
-            {routeRequest.routePreference === 'shortest' && '距離が最も短いルートを優先します。時間は多少かかる場合があります。'}
+            {routeRequest.routePreference === 'shortest' && '距離が最も短いルートを優先します。'}
           </p>
         </div>
       </div>
