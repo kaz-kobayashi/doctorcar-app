@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useStoreInitialization } from '@/stores';
-import { ProtectedRoute } from '@/components/auth';
+import { useProjectAuthStore } from '@/stores/projectAuthStore';
+import { ProtectedRoute, ProjectAuth } from '@/components/auth';
 import { ErrorBoundary } from '@/components/common';
 import { LoginPage } from '@/pages/LoginPage';
 
@@ -31,6 +32,8 @@ const UnauthorizedPage = () => (
 
 function App() {
   const { initialize } = useStoreInitialization();
+  const { isAuthenticated, checkAuth, authenticate } = useProjectAuthStore();
+  const [isChecking, setIsChecking] = useState(true);
   
   useEffect(() => {
     console.log('App: initializing stores');
@@ -43,8 +46,31 @@ function App() {
     }
   }, []); // 依存配列を空にして一度だけ実行
 
+  // 初回ロード時にプロジェクト認証状態をチェック
+  useEffect(() => {
+    checkAuth();
+    setIsChecking(false);
+  }, [checkAuth]);
+
   // GitHub Pages用のbasename設定
   const basename = process.env.NODE_ENV === 'production' ? '/doctorcar-app' : '';
+
+  // プロジェクト認証チェック中の表示
+  if (isChecking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">システムを読み込み中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // プロジェクト認証が必要
+  if (!isAuthenticated) {
+    return <ProjectAuth onAuthenticated={authenticate} />;
+  }
   
   return (
     <ErrorBoundary>

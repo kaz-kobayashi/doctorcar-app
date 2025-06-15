@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCaseStore, useAuthStore } from '@/stores';
+import { useProjectAuthStore } from '@/stores/projectAuthStore';
 import { Button, LoadingSpinner } from '@/components/common';
 import { CASE_STATUS } from '@/constants';
 
@@ -58,6 +59,7 @@ const getStatusBadge = (status: string) => {
 export const CaseListPage: React.FC = () => {
   const { cases, loading, error, loadCases } = useCaseStore();
   const { userInfo, logout } = useAuthStore();
+  const { logout: projectLogout } = useProjectAuthStore();
 
   useEffect(() => {
     loadCases();
@@ -65,6 +67,12 @@ export const CaseListPage: React.FC = () => {
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  const handleProjectLogout = () => {
+    projectLogout();
+    // ページをリロードして認証画面に戻る
+    window.location.reload();
   };
 
   return (
@@ -89,6 +97,9 @@ export const CaseListPage: React.FC = () => {
               </div>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 ログアウト
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleProjectLogout} className="text-red-600 border-red-300 hover:bg-red-50">
+                システム終了
               </Button>
             </div>
           </div>
